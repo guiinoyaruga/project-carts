@@ -1,14 +1,11 @@
 'use strict';
+ let cart = null;
 const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Carts extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
+   
     static associate(models) {
       Carts.hasMany(models.Carts_Items,{
         foreignKey: 'cart_id'
@@ -26,3 +23,4 @@ module.exports = (sequelize, DataTypes) => {
   });
   return Carts;
 };
+
