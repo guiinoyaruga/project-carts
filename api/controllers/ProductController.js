@@ -23,17 +23,27 @@ class ProductController {
   static async updateProduct(req, res) {
     const { id } = req.params;
     const newParams = req.body;
+
     try {
-      await database.Products.update(newParams, { where: { id: Number(id) } });
-      const updatedProduct = await database.Products.findOne({
+      const productExist = await database.Products.findOne({
         where: { id: Number(id) },
       });
-      return res.status(200).json(updatedProduct);
+
+      if (productExist) {
+        await database.Products.update(newParams, {
+          where: { id: Number(id) },
+        });
+        const updatedProduct = await database.Products.findOne({
+          where: { id: Number(id) },
+        });
+        return res.status(200).json(updatedProduct);
+      } else if (!productExist) {
+        return res.status(404).json(`Produto ${id} não encontrado`);
+      }
     } catch (error) {
       return res.status(500).json(error.message);
     }
   }
-
 }
 
 module.exports = ProductController;
