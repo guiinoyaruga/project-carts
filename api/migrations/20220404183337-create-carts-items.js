@@ -8,15 +8,15 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      produto_id: {
-        allowNull: false,
-        type: Sequelize.INTEGER,
-        references: { model: "Products", key: "id" },
-      },
       cart_id: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: { model: "Carts", key: "id" },
+      },
+      product_id: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: { model: "Products", key: "id" },
       },
       qty: {
         type: Sequelize.INTEGER,

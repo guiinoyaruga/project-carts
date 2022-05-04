@@ -17,21 +17,27 @@ class OrderController {
     }
   }
 
-  static async updateToPreparingOrder(req, res) {
+  static async updateOrder(req, res) {
     const { orderId } = req.params;
-    const status = "Preparing";
+    let status = req.body.status;
+    status.toUpperCase();
     try {
-      const penOrder = await database.Orders.findOne({where : {id : Number(orderId) }})
+      const penOrder = await database.Orders.findOne({
+        where: { id: Number(orderId) },
+      });
 
-      if(penOrder && penOrder.status === "Pending"){
-
-      const updateOrder = await database.Orders.update(
-        { status: status },
-        { where: { id: Number(orderId) } }
-      );
-      return res.status(200).json(`Pedido ${orderId} atualizado para ${status}`);
-      } else{
-        return res.status(404).json(`Pedido ${orderId} não encontrado ou status incorreto`)
+      if (penOrder && (status === "PREPARING" || status === "PENDING")) {
+        const updateOrder = await database.Orders.update(
+          { status: status },
+          { where: { id: Number(orderId) } }
+        );
+        return res
+          .status(200)
+          .json(`Pedido ${orderId} atualizado para ${status}`);
+      } else {
+        return res
+          .status(404)
+          .json(`Pedido ${orderId} não encontrado ou status incorreto`);
       }
     } catch (error) {
       return res.status(500).json(error.message);
@@ -40,20 +46,24 @@ class OrderController {
 
   static async updateToDoneOrder(req, res) {
     const { orderId } = req.params;
-    const status = "Done";
+    const status = "DONE";
     try {
+      const preOrder = await database.Orders.findOne({
+        where: { id: Number(orderId) },
+      });
 
-      const preOrder = await database.Orders.findOne({where : {id : Number(orderId) }})
-
-      if(preOrder && preOrder.status === "Preparing"){
-
-      const updateOrder = await database.Orders.update(
-        { status: status },
-        { where: { id: Number(orderId) } }
-      );
-      return res.status(200).json(`Pedido ${orderId} atualizado para ${status}`);
+      if (preOrder && preOrder.status === "Preparing" || preOrder.status === "Pending") {
+        const updateOrder = await database.Orders.update(
+          { status: status },
+          { where: { id: Number(orderId) } }
+        );
+        return res
+          .status(200)
+          .json(`Pedido ${orderId} atualizado para ${status}`);
       } else {
-        return res.status(404).json(`Pedido ${orderId} não encontrado ou status incorreto`)
+        return res
+          .status(404)
+          .json(`Pedido ${orderId} não encontrado ou status incorreto`);
       }
     } catch (error) {
       return res.status(500).json(error.message);
