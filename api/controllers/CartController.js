@@ -1,5 +1,5 @@
 const database = require("../models");
-const Products = require("../models/products")
+const Products = require("../models/products");
 
 class CartController {
   static async showMeOneCart(req, res) {
@@ -7,8 +7,7 @@ class CartController {
     try {
       const oneCart = await database.Carts.findAll({
         where: { id: Number(id) },
-        include: database.Carts_Items
-        
+        include: database.Carts_Items,
       });
 
       if (oneCart !== null && oneCart) {
@@ -20,7 +19,6 @@ class CartController {
       return res.status(500).json(error.message);
     }
   }
-  
 
   static async createCart(req, res) {
     const newCart = req.body;
@@ -51,8 +49,8 @@ class CartController {
 
       if (oneCart && oneProduct) {
         let cartItem = await database.Carts_Items.create({
-          product_id: oneProduct.id,
-          cart_id: oneCart.id,
+          ProductId: oneProduct.id,
+          CartId: oneCart.id,
           qty: qty,
           price: oneProduct.price,
           total: oneProduct.price * qty,
@@ -71,22 +69,6 @@ class CartController {
       return res.status(500).json(error.message);
     }
   }
-
-  static async showMeOneCartItem(req, res) {
-    const { cartId } = req.params;
-    
-    try {
-      const oneCart_Items = await database.Carts_Items.findOne({
-        where: { cart_id: Number(cartId) },
-      });
-
-
-      return res.status(200).json(oneCart_Items);
-    } catch (error) {
-      return res.status(500).json(error.message);
-    }
-  }
-
 
   static async destroyCart(req, res) {
     const { cartId } = req.params;

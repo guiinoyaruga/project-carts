@@ -1,9 +1,12 @@
 const database = require("../models");
+const prod = require("../models/products")
 
 class ProductController {
   static async showMeProducts(req, res) {
     try {
-      const allProducts = await database.Products.findAll();
+      const allProducts = await database.Products.findAll({
+       
+      });
       return res.status(200).json(allProducts);
     } catch (error) {
       return res.status(500).json(error.message);
@@ -32,9 +35,13 @@ class ProductController {
       if (productExist) {
         await database.Products.update(newParams, {
           where: { id: Number(id) },
+          
         });
         const updatedProduct = await database.Products.findOne({
           where: { id: Number(id) },
+          attributes: {
+            exclude: ["createdAt", "updatedAt", "id"]
+           },
         });
         return res.status(200).json(updatedProduct);
       } else if (!productExist) {
