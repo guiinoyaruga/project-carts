@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "root",
-    "password": "password",
+    "password": "C4b1de28@*",
     "database": "project_carts",
     "host": "127.0.0.1",
     "dialect": "mysql"

@@ -1,3 +1,4 @@
+
 const database = require("../models");
 const Products = require("../models/products");
 
@@ -7,7 +8,12 @@ class CartController {
     try {
       const oneCart = await database.Carts.findAll({
         where: { id: Number(id) },
-        include: database.Carts_Items,
+        attributes: {exclude: ["createdAt", "updatedAt"]},
+        include:[{
+          model: database.Carts_Items,
+          attributes: {exclude: ["createdAt", "updatedAt"]}
+        }],
+        
       });
 
       if (oneCart !== null && oneCart) {
