@@ -5,7 +5,7 @@ class CartController {
   static async showMeOneCart(req, res) {
     const { id } = req.params;
     try {
-      const oneCart = await database.Carts.findAll({
+      const oneCart = await database.Carts.findOne({
         where: { id: Number(id) },
         attributes: { exclude: ["createdAt", "updatedAt"] },
         include: [
@@ -13,6 +13,11 @@ class CartController {
             model: database.Carts_Items,
             // all: true -> inclui todas as associações
             attributes: { exclude: ["createdAt", "updatedAt"] }, // attributes, exclude -> excluir os atributos da requisição
+            include: [
+              {
+                model: database.Products,
+              },
+            ],
           },
         ],
       });
@@ -28,7 +33,6 @@ class CartController {
   }
 
   static async createCart(req, res) {
-    const newCart = req.body;
     let start = 0;
     try {
       const newCartCreated = await database.Carts.create(
@@ -46,7 +50,7 @@ class CartController {
     const { productId, cartId } = req.params; // o mesmo nome que está na rota
     try {
       const oneCart = await database.Carts.findOne({
-        //Busca em carts o id de cartS passado na rota e salva na variável oneCart
+        //Busca em carts o id de carts passado na rota e salva na variável oneCart
         where: { id: Number(cartId) },
       });
       const oneProduct = await database.Products.findOne({
@@ -54,7 +58,12 @@ class CartController {
         where: { id: Number(productId) },
       });
 
-      if (oneCart && oneProduct) {
+      if (
+        oneCart &&
+        oneProduct
+        // typeof productId !== "string" &&
+        // typeof cartId !== "string"
+      ) {
         let cartItem = await database.Carts_Items.create({
           ProductId: oneProduct.id,
           CartId: oneCart.id,

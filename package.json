@@ -10,11 +10,15 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.20.0",
+    "cors": "^2.8.5",
     "express": "^4.17.3",
     "mysql2": "^2.3.3",
-    "nodemon": "^2.0.15",
+    "nodemon": "^1.19.4",
     "path": "^0.12.7",
     "sequelize": "^6.18.0",
     "sequelize-cli": "^6.4.1"
+  },
+  "devDependencies": {
+    "prettier": "2.7.1"
   }
 }
